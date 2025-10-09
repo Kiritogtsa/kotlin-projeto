@@ -3,6 +3,7 @@ package com.teste
 import com.teste.dtos.colaborador.Colaboradorsessao
 import com.teste.handlers.ColaboradorHandlers
 import com.teste.routes.Projectrotas
+import com.teste.routes.tasksroutes
 import com.teste.routes.colaboradorrotas
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -48,5 +49,6 @@ fun Application.module() {
         }
         colaboradorrotas()
         Projectrotas()
+        tasksroutes()
     }
 }

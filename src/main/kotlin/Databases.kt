@@ -6,18 +6,22 @@ import org.jetbrains.exposed.sql.Database
 //lateinit var database: Database
 fun Application.configureDatabases() {
     val dbconfig = environment.config.config("ktor.database")
+
+    val url = dbconfig.propertyOrNull("url")?.getString()
+        ?: "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1"  // fallback para testes
+    val driver = dbconfig.propertyOrNull("driver")?.getString()
+        ?: "org.h2.Driver"
+    val user = dbconfig.propertyOrNull("user")?.getString()
+        ?: "sa"
+    val password = dbconfig.propertyOrNull("password")?.getString()
+        ?: ""
+
     Database.connect(
-        url = dbconfig.property("url").getString(),
-        user = dbconfig.property("user").getString(),
-        driver = dbconfig.property("driver").getString(),
-        password = dbconfig.property("password").getString(),
+        url = url,
+        driver = driver,
+        user = user,
+        password = password
     )
-//    try {
-//        transaction(database) {
-//            exec("SELECT 1")
-//        }
-//        log.info("✅ Conexão com banco estabelecida com sucesso!")
-//    } catch (e: Exception) {
-//        log.error("❌ Erro ao abrir o banco de dados", e) // passa a Exception, não e.message
-//    }
 }
+
+

@@ -25,7 +25,7 @@ dependencies {
     implementation(libs.ktor.server.sessions)
     implementation(libs.exposed.datetime)
     implementation(libs.kotlinx.datetime)
-//    implementation("org.jetbrains.exposed:exposed-jdbc:0.41.1") // necessário para transações e JDBC
+    implementation("org.jetbrains.exposed:exposed-jdbc:0.41.1") // necessário para transações e JDBC
     implementation(libs.logback.classic)
     implementation(libs.mysql)
     implementation(libs.bcrypt)
