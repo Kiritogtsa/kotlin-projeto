@@ -68,6 +68,9 @@ class ColaboradorHandlers(private val colaborador: ColaboradorController = Colab
 
     // mesma coisa
     suspend fun upadtecolaborador(call: ApplicationCall) {
+        if(!call.request.contentType().equals(ContentType.Application.Json)){
+            call.respond(HttpStatusCode.NotAcceptable," the context type dont as json")
+        }
 
     }
 }

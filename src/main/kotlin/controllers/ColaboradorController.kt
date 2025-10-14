@@ -1,6 +1,7 @@
 package com.teste.controllers
 
 import at.favre.lib.crypto.bcrypt.BCrypt
+import com.mysql.cj.log.Log
 import com.teste.dtos.colaborador.ColaboradorResponseHttp
 import com.teste.dtos.colaborador.Colaboradorrequesthttp
 import com.teste.dtos.colaborador.Loginstatus
@@ -24,6 +25,30 @@ class ColaboradorController(
                 Result.failure(e)
             }
         )
+    }
+
+    fun update(colaboradorHttp: Colaboradorrequesthttp): Result<Loginstatus> {
+        return try {
+            print("update")
+            if (colaboradorHttp.email == null || !colaboradorHttp.email.contains("@")) {
+                return Result.failure(Exception("email inexistente ou invalido"))
+            }
+            val colaborador = colaboradorHttp.tocolaborador()
+            val result = repository.update(colaborador)
+            result.fold(
+                onSuccess = { c ->
+                    Result.success(Loginstatus(true,c))
+                },
+                onFailure = { e ->
+                    print(e.message)
+                    Result.failure(e)
+                }
+            )
+        } catch (
+            e: Exception
+        ) {
+            Result.failure(e)
+        }
     }
 
     fun create(colaboradorhttp: Colaboradorrequesthttp): Result<Loginstatus> {
