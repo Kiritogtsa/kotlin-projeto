@@ -1,5 +1,6 @@
 package com.teste
 
+import com.teste.dtos.Project.ProjetosdataSimple
 import com.teste.dtos.colaborador.Colaboradorsessao
 import com.teste.handlers.ColaboradorHandlers
 import com.teste.routes.Projectrotas
@@ -12,6 +13,12 @@ import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.hours
+
+// terminar a estrutura do novo
+
+
+
 
 fun main(args: Array<String>) {
     io.ktor.server.netty.EngineMain.main(args)
@@ -21,7 +28,15 @@ fun Application.module() {
     install(Sessions) {
         cookie<Colaboradorsessao>("user_session") {
             cookie.path = "/"
+            cookie.secure = true
+            cookie.httpOnly = true
             cookie.maxAge = 1.days
+        }
+        cookie<ProjetosdataSimple>("privilegios"){
+            cookie.path = "/"
+            cookie.secure = true
+            cookie.httpOnly = true
+            cookie.maxAge = 1.hours
         }
         // aqui vai ter outro cookie
         // por agora to meio sem idea para continuar

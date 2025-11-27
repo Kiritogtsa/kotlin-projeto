@@ -22,7 +22,7 @@ class TaskHandler(
                 call.respond(HttpStatusCode.OK,tasks)
             },
             onFailure = { e ->
-                val string = "ip: " + ip + " rota: /tasks/\n" + e
+                "ip: " + ip + " rota: /tasks/\n" + e
                 print(e)
                 call.respond(HttpStatusCode.ExpectationFailed,e.message.toString())
             }

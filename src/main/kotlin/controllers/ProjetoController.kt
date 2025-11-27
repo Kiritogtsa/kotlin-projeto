@@ -5,6 +5,8 @@ import com.teste.dtos.Project.Projectpessoasrequest
 import com.teste.dtos.colaborador.ColaboradorResponseHttp
 import com.teste.mappers.colaboradores.toColaboradorresponsehttp
 import com.teste.mappers.projects.toResponseHttp
+import com.teste.models.Colaborador
+import com.teste.models.Project
 import com.teste.repository.ProjectReposity
 
 class ProjetoController(

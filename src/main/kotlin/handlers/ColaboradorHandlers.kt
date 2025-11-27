@@ -1,14 +1,20 @@
 package com.teste.handlers
 
+
 import com.teste.controllers.ColaboradorController
+import com.teste.dtos.Project.privilegiosessoes
 import com.teste.dtos.colaborador.Colaboradorrequesthttp
 import com.teste.dtos.colaborador.colaboradorhttp
 import com.teste.mappers.colaboradores.tocolaboradorsessao
+import com.teste.repository.ProjectReposity
+
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.sessions.*
+
+
 
 // falta fazer o post do insert, o put do update eo del do deletar
 class ColaboradorHandlers(private val colaborador: ColaboradorController = ColaboradorController()) {
@@ -18,21 +24,26 @@ class ColaboradorHandlers(private val colaborador: ColaboradorController = Colab
         }
         val colarequest = call.receive<colaboradorhttp>()
         val result = colaborador.login(colarequest)
-        result.fold(
-            onSuccess = { loginstatus ->
+        result
+            .onSuccess { loginstatus ->
                 if (loginstatus.success) {
                     var usersessao = loginstatus.colaborador?.tocolaboradorsessao()
+                    val privilegios = ProjectReposity().getprivilegiosandprojetos(loginstatus.colaborador!!)
+                    if (privilegios.isSuccess) {
+                        val priv = privilegios.getOrNull()!!
+                        call.sessions.set(privilegiosessoes(priv))
+                    }
                     call.sessions.set(usersessao)
                     call.respond(HttpStatusCode.OK, "sucesso ao fazer o login")
                 } else {
                     call.respond(HttpStatusCode.NotAcceptable, "senha incorreta")
                 }
-            },
-            onFailure = { e ->
+            }
+            .onFailure { e ->
                 call.respond(HttpStatusCode.InternalServerError, "Erro interno: ${e.message}")
             }
-        )
     }
+
 
     suspend fun getall(call: ApplicationCall) {
         val result = colaborador.Getall()
@@ -73,4 +84,6 @@ class ColaboradorHandlers(private val colaborador: ColaboradorController = Colab
         }
 
     }
+
+    //
 }

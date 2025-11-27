@@ -1,13 +1,16 @@
 package com.teste.repository
 
+import com.teste.dtos.Project.ProjetosdataSimple
 import com.teste.mappers.colaboradores.toColaborador
 import com.teste.mappers.projects.mapFrom
 import com.teste.mappers.projects.toProject
+import com.teste.mappers.projects.toProjetcdatesimple
 import com.teste.models.Colaborador
 import com.teste.models.Project
 import com.teste.tables.Colaboradores
 import com.teste.tables.Equipeproject
 import com.teste.tables.Projects
+import kotlinx.coroutines.selects.select
 import org.jetbrains.exposed.sql.SqlExpressionBuilder
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.insert
@@ -69,7 +72,19 @@ class ProjectReposity {
             Result.failure(e)
         }
     }
-
+    fun getprivilegiosandprojetos(colaborador: Colaborador):Result<List<ProjetosdataSimple>>{
+        return try {
+            val id = colaborador.id!!
+            val saved = transaction {
+                (Equipeproject innerJoin Projects)
+                    .select(Equipeproject.id_colaborador eq id)
+                    .map { it.toProjetcdatesimple() }
+            }
+            Result.success(saved)
+        }catch (e: Exception){
+            Result.failure(e)
+        }
+    }
     fun insertuser(colaborador: Colaborador, project: Project, funcao: String) {
         transaction {
             Equipeproject.insert {
