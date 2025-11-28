@@ -1,0 +1,67 @@
+# ---------------------------
+#  Arquivos sensíveis
+# ---------------------------
+.env
+.env.*
+
+
+# ---------------------------
+#  Node / React (frontend)
+# ---------------------------
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.vite/
+frontend/.parcel-cache/
+frontend/.next/
+frontend/.cache/
+
+
+# ---------------------------
+#  Kotlin / Ktor (backend)
+# ---------------------------
+main/build/
+main/out/
+main/.gradle/
+main/.idea/
+main/*.log
+main/resources/application.conf
+
+
+# ---------------------------
+#  Diretórios de testes
+# ---------------------------
+test/
+*/test/
+**/test/
+**/tests/
+
+
+# ---------------------------
+#  IDEs / Editores
+# ---------------------------
+
+# IntelliJ / Android Studio
+.idea/
+*.iml
+
+# VSCode
+.vscode/
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# ---------------------------
+#  Sistemas Operacionais
+# ---------------------------
+.DS_Store
+Thumbs.db
+
+
+# ---------------------------
+#  Logs gerais
+# ---------------------------
+*.log
+logs/
