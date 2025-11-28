@@ -1,10 +1,14 @@
 import './App.css'
-
+import './pages/login/login'
+import './pages/contextos/usercontexto'
+import { useState } from 'react';
+import { Userprovider } from './pages/contextos/usercontexto';
+import Home from './pages/home/home';
 function App() {
-  return (
-    <>
-     <p>nada por agora</p> 
-    </>
+   return (
+    <Userprovider>
+      <Home></Home>
+    </Userprovider>
   )
 }
 

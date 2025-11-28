@@ -1,0 +1,17 @@
+.loginform {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.form_login {
+    display: flex;
+    background-color: blue;
+    flex-direction: column;
+    border: 10px solid blue;
+    border-radius: 10px;
+    border-color: blue;
+    opacity: 0.5;
+}
