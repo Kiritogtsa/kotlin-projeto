@@ -21,8 +21,12 @@ fun Route.colaboradorrotas(handler: ColaboradorHandlers = ColaboradorHandlers())
         // aqui e a rote pessoal do colaborador, tanto o update dele mesmo vai vim por aqui
 
     }
+    route("/me"){
+        install(RequireLoginPlugin)
+        get { handler.me(call) }
+    }
     route("/login") {
-        post {
+        post{
             handler.login(call)
         }
     }

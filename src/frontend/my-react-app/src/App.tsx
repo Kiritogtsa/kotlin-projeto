@@ -1,15 +1,14 @@
-import './App.css'
-import './pages/login/login'
-import './pages/contextos/usercontexto'
-import { useState } from 'react';
-import { Userprovider } from './pages/contextos/usercontexto';
-import Home from './pages/home/home';
+import "./App.css";
+import "./pages/login/login";
+import "./pages/contextos/usercontexto";
+import { Userprovider } from "./pages/contextos/usercontexto";
+import Pagina from "./pages/home/pagina";
 function App() {
-   return (
+  return (
     <Userprovider>
-      <Home></Home>
+      <Pagina />
     </Userprovider>
-  )
+  );
 }
 
-export default App
+export default App;

@@ -1,0 +1,1 @@
+export type Tela = "login" | "pagina2";

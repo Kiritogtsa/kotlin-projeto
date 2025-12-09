@@ -8,6 +8,7 @@ import com.teste.routes.tasksroutes
 import com.teste.routes.colaboradorrotas
 import io.ktor.http.*
 import io.ktor.server.application.*
+
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
@@ -25,22 +26,24 @@ fun main(args: Array<String>) {
 }
 
 fun Application.module() {
+    configureCORS()
     install(Sessions) {
         cookie<Colaboradorsessao>("user_session") {
             cookie.path = "/"
-            cookie.secure = true
+            cookie.secure = false     // ✅ necessário no ambiente local
             cookie.httpOnly = true
             cookie.maxAge = 1.days
         }
-        cookie<ProjetosdataSimple>("privilegios"){
+        cookie<ProjetosdataSimple>("privilegios") {
             cookie.path = "/"
-            cookie.secure = true
+            cookie.secure = false     // ✅ necessário no ambiente local
             cookie.httpOnly = true
             cookie.maxAge = 1.hours
         }
         // aqui vai ter outro cookie
         // por agora to meio sem idea para continuar
     }
+
     val colaboradorHandlers = ColaboradorHandlers()
     configureSerialization()
     configureDatabases()

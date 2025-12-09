@@ -1,33 +1,69 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './login.css';
-import { Userprovider, useUser } from '../contextos/usercontexto';
-import { StatusEnum } from '../../model/enums/statusenum';
+import { useUser } from '../contextos/usercontexto';
+import type { Tela } from '../../types/typestelas';
+import '../../utils/auth';
+import { fetchme } from '../../utils/auth';
+import type { barProps, Pages } from '../../utils/interfaces';
 
-function Login() {
-    const { user, updateUserPartial} = useUser();
-    const apiUser = {
-        nome: "Maria",
-        email: "maria@email.com",
-        status: StatusEnum.ATIVO
-    };
-    const handlesubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        let form = event.currentTarget;
-        let formelement = new FormData(form)
-        let inputindetifier: string = formelement.get("emailorname")?.toString() || "";
-        let password: string = formelement.get("password")?.toString() || "";
-        if (inputindetifier.match("@") && (inputindetifier.length > 10 && inputindetifier.length < 40)) {
-            console.log("é um email valido")
-        } else if (inputindetifier.match("@")) {
-            console.log("é um email invalido")
+
+interface LoginProps extends Pages { }
+
+
+export default function Login({ mudarTela }: LoginProps) {
+    const apikey = import.meta.env.VITE_API_URL_REACT;
+    const { updateUserPartial } = useUser();
+    useEffect(() => {
+        async function loadUser() {
+            const user = await fetchme(apikey + "me")
+            if (user) {
+                updateUserPartial(user)
+                mudarTela("pagina2")
+            }
         }
-        updateUserPartial(apiUser)
+        loadUser()
+    }, [])
+
+    async function mandar_dados(email: string, password: string) {
+        const body = { email, password };
+
+        const response = await fetch(apikey + "login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: "include",
+            body: JSON.stringify(body)
+        });
+
+        if (!response.ok) {
+            throw new Error("Login falhou");
+        }
+
+        const data = await response.json();
+        updateUserPartial(data); // agora funciona
     }
+
+    const handlesubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        const form = event.currentTarget;
+        const formelement = new FormData(form);
+
+        const inputidentifier = formelement.get("emailorname")?.toString() || "";
+        const password = formelement.get("password")?.toString() || "";
+
+        await mandar_dados(inputidentifier, password);
+        mudarTela("pagina2")
+    };
     return (
-        <div className="loginform" >
+
+        <div className="loginform">
             <form className="form_login" onSubmit={handlesubmit}>
-                <label htmlFor="emailorname">email or name:</label>
-                <input id="emailorname"
+
+                <label htmlFor="emailorname">Email or name:</label>
+                <input
+                    id="emailorname"
                     name="emailorname"
                     type="text"
                     minLength={5}
@@ -35,12 +71,20 @@ function Login() {
                     placeholder="email or name"
                     required
                 />
-                <label htmlFor="password">password:</label>
-                <input id="password" name="password" minLength={3} maxLength={20} placeholder="password here" required />
+
+                <label htmlFor="password">Password:</label>
+                <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    minLength={3}
+                    maxLength={20}
+                    placeholder="password here"
+                    required
+                />
+
                 <button type="submit">Submit</button>
             </form>
         </div>
-    )
+    );
 }
-
-export default Login;

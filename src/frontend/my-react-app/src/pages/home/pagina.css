@@ -1,0 +1,16 @@
+.dashboard-container {
+    display: flex;
+    height: 100vh;
+}
+
+.dashboard-sidebar {
+    width: 220px;
+    background: #1f1f1f;
+    padding: 20px;
+    color: white;
+}
+
+.dashboard-content {
+    flex: 1;
+    padding: 20px;
+}

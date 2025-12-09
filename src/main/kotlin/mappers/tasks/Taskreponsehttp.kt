@@ -12,6 +12,6 @@ fun Task.toTaskresponsehttp(): TaskResponseHTTP {
         project = this.project.toResponseHttp(),
         prazo = this.prazo.toString(),
         status = this.status,
-        resposavel = this.resposavel.toColaboradorresponsehttp()
+        responsavel = this.resposavel.toColaboradorresponsehttp()
     )
 }

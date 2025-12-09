@@ -4,7 +4,9 @@ package com.teste.handlers
 import com.teste.controllers.ColaboradorController
 import com.teste.dtos.Project.privilegiosessoes
 import com.teste.dtos.colaborador.Colaboradorrequesthttp
+import com.teste.dtos.colaborador.Colaboradorsessao
 import com.teste.dtos.colaborador.colaboradorhttp
+import com.teste.mappers.colaboradores.toColaboradorresponsehttp
 import com.teste.mappers.colaboradores.tocolaboradorsessao
 import com.teste.repository.ProjectReposity
 
@@ -13,7 +15,7 @@ import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.sessions.*
-
+import io.ktor.server.sessions.get
 
 
 // falta fazer o post do insert, o put do update eo del do deletar
@@ -34,7 +36,7 @@ class ColaboradorHandlers(private val colaborador: ColaboradorController = Colab
                         call.sessions.set(privilegiosessoes(priv))
                     }
                     call.sessions.set(usersessao)
-                    call.respond(HttpStatusCode.OK, "sucesso ao fazer o login")
+                    call.respond(HttpStatusCode.OK, loginstatus.colaborador.toColaboradorresponsehttp())
                 } else {
                     call.respond(HttpStatusCode.NotAcceptable, "senha incorreta")
                 }
@@ -43,8 +45,6 @@ class ColaboradorHandlers(private val colaborador: ColaboradorController = Colab
                 call.respond(HttpStatusCode.InternalServerError, "Erro interno: ${e.message}")
             }
     }
-
-
     suspend fun getall(call: ApplicationCall) {
         val result = colaborador.Getall()
         result.fold(
@@ -84,6 +84,18 @@ class ColaboradorHandlers(private val colaborador: ColaboradorController = Colab
         }
 
     }
-
+    suspend fun me(call: ApplicationCall){
+        val session = call.sessions.get<Colaboradorsessao>()
+        if(session == null){
+            return call.respond(HttpStatusCode.Unauthorized, "fazer login")
+        }
+        val result =colaborador.getbyemail(session.email.toString())
+        result.fold(
+            onSuccess = { colaborador ->
+                call.respond(HttpStatusCode.OK, colaborador.toColaboradorresponsehttp())
+            },
+            onFailure = { e -> print("erro ${e.toString()}") }
+        )
+    }
     //
 }

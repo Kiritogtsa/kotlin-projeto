@@ -24,6 +24,8 @@ mysql = {module = "mysql:mysql-connector-java", version = "8.0.33"}
 bcrypt = { module = "at.favre.lib:bcrypt", version = "0.9.0" }
 exposed-datetime = { module = "org.jetbrains.exposed:exposed-kotlin-datetime", version.ref = "exposed" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
+cors = { module = "io.ktor:ktor-server-cors", version.ref = "ktor" }
+
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
