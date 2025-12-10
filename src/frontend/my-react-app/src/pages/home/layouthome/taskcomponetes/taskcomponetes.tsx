@@ -1,4 +1,4 @@
-import type { Task } from "../../../../model/task";
+import type { Task } from "../../../../model/task.tsx";
 import "./taskcomponetes.css";
 
 interface TaskListProps {
@@ -8,7 +8,6 @@ interface TaskListProps {
 // outro jeito, dependo do local eu vou usar o com interface e por ai
 // {tasks}:{tasks:Task[]}
 function Componetetask({ tasks }: TaskListProps) {
-    console.log(tasks);
     return (
         <div className="tasks">
             {tasks.map((task) => (
@@ -24,4 +23,3 @@ function Componetetask({ tasks }: TaskListProps) {
 }
 
 export default Componetetask;
-

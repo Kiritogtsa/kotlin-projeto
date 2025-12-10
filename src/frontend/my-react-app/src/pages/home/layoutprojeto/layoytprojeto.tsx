@@ -1,4 +1,4 @@
-import type { Layoutchanges } from "../../../utils/interfaces.ts";
-
-function LayoutProjeto({ mudarlayout }: Layoutchanges) {}
+function LayoutProjeto() {
+  return <div></div>;
+}
 export default LayoutProjeto;

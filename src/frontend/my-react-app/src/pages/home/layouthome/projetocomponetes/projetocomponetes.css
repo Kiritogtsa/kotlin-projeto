@@ -1,0 +1,19 @@
+.projetos {
+    display: flex;
+    gap: 12px;
+    padding: 10px;
+    overflow-x: auto;      /* Ativa o scroll horizontal */
+    white-space: nowrap;   /* Impede quebra de linha */
+}
+
+.projeto {
+    min-width: 250px;      /* Largura mínima de cada card */
+    display: inline-flex;  /* Fica um do lado do outro */
+    flex-direction: column;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #f7f7f7;
+    color: black;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}

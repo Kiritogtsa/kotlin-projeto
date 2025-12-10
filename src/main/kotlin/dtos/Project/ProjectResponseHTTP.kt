@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ProjectResponseHTTP(
+    val id: Int?,
     val nome: String?,
     val tipo: Typeproject?,
     val status: StatusPj?,

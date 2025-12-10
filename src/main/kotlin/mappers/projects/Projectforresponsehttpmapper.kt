@@ -5,6 +5,7 @@ import com.teste.models.Project
 
 fun Project.toResponseHttp(): ProjectResponseHTTP {
     return ProjectResponseHTTP(
+        id = this.id,
         nome = this.nome,
         tipo = this.tipo,
         status = this.status,

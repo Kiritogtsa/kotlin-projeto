@@ -1,11 +1,8 @@
-import type { Layoutchanges } from "../../../utils/interfaces";
-import { useUser } from "../../contextos/usercontexto";
+import { useUser } from "../../contextos/usercontexto.tsx";
 
-function LayoutTarefa( {mudarlayout}:Layoutchanges) {
-   const {user} = useUser();
-    return (
-        <p>{user.cargo}</p>
-    );
+function LayoutTarefa() {
+  const { user } = useUser();
+  return <p>{user.cargo}</p>;
 }
 
 export default LayoutTarefa;
