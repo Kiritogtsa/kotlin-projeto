@@ -3,14 +3,17 @@ package com.teste.controllers
 import com.teste.dtos.Project.ProjectResponseHTTP
 import com.teste.dtos.Project.Projectpessoasrequest
 import com.teste.dtos.colaborador.ColaboradorResponseHttp
+import com.teste.dtos.colaborador.Colaboradorrequesthttp
 import com.teste.mappers.colaboradores.toColaboradorresponsehttp
 import com.teste.mappers.projects.toResponseHttp
 import com.teste.models.Colaborador
 import com.teste.models.Project
+import com.teste.repository.ColaboradorRepository
 import com.teste.repository.ProjectReposity
 
 class ProjetoController(
-    private val respository: ProjectReposity = ProjectReposity()
+    private val respository: ProjectReposity = ProjectReposity(),
+    private val colaboradorrepository: ColaboradorRepository = ColaboradorRepository()
 ) {
     fun getall(): Result<List<ProjectResponseHTTP>> {
         val result = respository.getall()
@@ -32,10 +35,28 @@ class ProjetoController(
         return respository.getbyname(nome).fold(
             onSuccess = { project ->
                 respository.getcolaboradores(project).fold(
-                    onSuccess = { projects ->
-                        Result.success(projects.map { it.toColaboradorresponsehttp() })
+                    onSuccess = { colaboradores ->
+                        Result.success(colaboradores.map { it.toColaboradorresponsehttp() })
                     },
                     onFailure = { e ->
+                        Result.failure(e)
+                    }
+                )
+            },
+            onFailure = { e ->
+                Result.failure(e)
+            }
+        )
+    }
+    fun getProjetsforColaborador(colaboradorrequesthttp: Colaboradorrequesthttp): Result<List<ProjectResponseHTTP>>{
+        val email = requireNotNull(colaboradorrequesthttp.email)
+        return colaboradorrepository.getByEmail(email).fold(
+            onSuccess = { colaborador ->
+                respository.getProjectsonColaboradores(colaborador).fold(
+                    onSuccess = { projects ->
+                        Result.success(projects.map { it.toResponseHttp()})
+                    },
+                    onFailure = {e ->
                         Result.failure(e)
                     }
                 )

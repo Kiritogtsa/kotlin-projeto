@@ -8,7 +8,6 @@ import ComponeteProjeto from "./projetocomponetes/componeteprojeto.tsx";
 import Componetetask from "./taskcomponetes/taskcomponetes.tsx";
 
 function Home() {
-  // aqui ainda vai adicionar mais coisas, falta o projetos,
   const apikey = import.meta.env.VITE_API_URL_REACT;
   // estado global centralizado do usuario
   const { user } = useUser();

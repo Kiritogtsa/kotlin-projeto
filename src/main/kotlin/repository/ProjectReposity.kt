@@ -1,10 +1,13 @@
 package com.teste.repository
 
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.teste.dtos.Project.ProjectResponseHTTP
 import com.teste.dtos.Project.ProjetosdataSimple
 import com.teste.mappers.colaboradores.toColaborador
 import com.teste.mappers.projects.mapFrom
 import com.teste.mappers.projects.toProject
 import com.teste.mappers.projects.toProjetcdatesimple
+import com.teste.mappers.projects.toResponseHttp
 import com.teste.models.Colaborador
 import com.teste.models.Project
 import com.teste.tables.Colaboradores
@@ -17,8 +20,10 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
-class ProjectReposity {
-    fun getall(): Result<List<Project>> {
+class ProjectReposity
+{
+    fun getall(): Result<List<Project>>
+    {
         return try {
             val projects = transaction { Projects.selectAll().map { it.toProject() } }
             Result.success(projects)
@@ -27,7 +32,8 @@ class ProjectReposity {
         }
     }
 
-    fun get(id: Int): Result<Project> {
+    fun get(id: Int): Result<Project>
+    {
         return try {
             val project = transaction {
                 Projects.select(Projects.id eq id)
@@ -41,7 +47,8 @@ class ProjectReposity {
         }
     }
 
-    fun getbyname(nome: String): Result<Project> {
+    fun getbyname(nome: String): Result<Project>
+    {
         return try {
             val project = transaction {
                 with(SqlExpressionBuilder) {
@@ -57,7 +64,8 @@ class ProjectReposity {
         }
     }
 
-    fun insert(project: Project): Result<Project> {
+    fun insert(project: Project): Result<Project>
+    {
         return try {
             val saved = transaction {
                 val insertStatement = Projects.insert(Projects.mapFrom(project))
@@ -72,7 +80,8 @@ class ProjectReposity {
             Result.failure(e)
         }
     }
-    fun getprivilegiosandprojetos(colaborador: Colaborador):Result<List<ProjetosdataSimple>>{
+    fun getprivilegiosandprojetos(colaborador: Colaborador):Result<List<ProjetosdataSimple>>
+    {
         return try {
             val id = colaborador.id!!
             val saved = transaction {
@@ -85,7 +94,9 @@ class ProjectReposity {
             Result.failure(e)
         }
     }
-    fun insertuser(colaborador: Colaborador, project: Project, funcao: String) {
+
+    fun insertuser(colaborador: Colaborador, project: Project, funcao: String)
+    {
         transaction {
             Equipeproject.insert {
                 it[this.id_project] = project.id!!
@@ -95,7 +106,8 @@ class ProjectReposity {
         }
     }
 
-    fun getcolaboradores(project: Project): Result<List<Colaborador>> {
+    fun getcolaboradores(project: Project): Result<List<Colaborador>>
+    {
         return try {
             val saved = transaction {
                 (Equipeproject innerJoin Colaboradores)
@@ -104,6 +116,19 @@ class ProjectReposity {
             }
             Result.success(saved.map { it.toColaborador() })
         } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    fun getProjectsonColaboradores(colaborador: Colaborador): Result<List<Project>>
+    {
+        return try {
+            val saved = transaction{ (Equipeproject innerJoin Projects)
+                .selectAll()
+                .filter { it[Equipeproject.id_colaborador] == colaborador.id}
+            }
+            Result.success(saved.map { it.toProject() })
+        }catch (e: Exception){
             Result.failure(e)
         }
     }
