@@ -9,6 +9,7 @@ import io.ktor.server.sessions.*
 val RequireLoginPlugin = createRouteScopedPlugin("RequieLogin") {
     onCall { call ->
         val session = call.sessions.get<Colaboradorsessao>()
+        print(session)
         if (session == null) {
             call.respond(HttpStatusCode.Unauthorized, "Usuário não logado")
             return@onCall

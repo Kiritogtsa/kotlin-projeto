@@ -1,6 +1,7 @@
 package com.teste.middlerware
 
 import com.teste.dtos.colaborador.Colaboradorsessao
+import com.teste.repository.ColaboradorRepository
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
@@ -22,6 +23,19 @@ fun Requirepriv(vararg roles: String) = createRouteScopedPlugin("requirepriv") {
                     colaboradorsessao.cargo
                     )
             call.respond(HttpStatusCode.Unauthorized, "sem autorizaçaõ")
+            return@onCall
         }
+        ColaboradorRepository().getByEmail(colaboradorsessao.email!!).fold(
+            onSuccess = { colaborador ->
+                if(!(colaborador.cargo == colaboradorsessao.cargo && colaborador.email == colaboradorsessao.email && colaborador.nome == colaboradorsessao.nome)){
+                    call.sessions.clear<Colaboradorsessao>()
+                    call.respond(HttpStatusCode.Unauthorized,"o erro na sessão do usuario")
+                    return@fold
+                }
+            },
+            onFailure = { e->
+                call.respond(HttpStatusCode.InternalServerError,e)
+            }
+        )
     }
 }

@@ -1,28 +1,26 @@
-import { useEffect, useState } from 'react';
-import './login.css';
-import { useUser } from '../contextos/usercontexto';
-import type { Tela } from '../../types/typestelas';
-import '../../utils/auth';
-import { fetchme } from '../../utils/auth';
-import type { barProps, Pages } from '../../utils/interfaces';
+import { useEffect, useState } from "react";
+import "./login.css";
+import { useUser } from "../contextos/usercontexto";
+import type { Tela } from "../../types/typestelas";
+import "../../utils/auth";
+import { fetchme } from "../../utils/auth";
+import type { barProps, Pages } from "../../utils/interfaces";
 
-
-interface LoginProps extends Pages { }
-
+interface LoginProps extends Pages {}
 
 export default function Login({ mudarTela }: LoginProps) {
     const apikey = import.meta.env.VITE_API_URL_REACT;
     const { updateUserPartial } = useUser();
     useEffect(() => {
         async function loadUser() {
-            const user = await fetchme(apikey + "me")
+            const user = await fetchme(apikey + "me");
             if (user) {
-                updateUserPartial(user)
-                mudarTela("pagina2")
+                updateUserPartial(user);
+                mudarTela("pagina2");
             }
         }
-        loadUser()
-    }, [])
+        loadUser();
+    }, []);
 
     async function mandar_dados(email: string, password: string) {
         const body = { email, password };
@@ -30,10 +28,10 @@ export default function Login({ mudarTela }: LoginProps) {
         const response = await fetch(apikey + "login", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             },
             credentials: "include",
-            body: JSON.stringify(body)
+            body: JSON.stringify(body),
         });
 
         if (!response.ok) {
@@ -50,17 +48,16 @@ export default function Login({ mudarTela }: LoginProps) {
         const form = event.currentTarget;
         const formelement = new FormData(form);
 
-        const inputidentifier = formelement.get("emailorname")?.toString() || "";
+        const inputidentifier = formelement.get("emailorname")?.toString() ||
+            "";
         const password = formelement.get("password")?.toString() || "";
 
         await mandar_dados(inputidentifier, password);
-        mudarTela("pagina2")
+        mudarTela("pagina2");
     };
     return (
-
         <div className="loginform">
             <form className="form_login" onSubmit={handlesubmit}>
-
                 <label htmlFor="emailorname">Email or name:</label>
                 <input
                     id="emailorname"
@@ -88,3 +85,4 @@ export default function Login({ mudarTela }: LoginProps) {
         </div>
     );
 }
+

@@ -48,15 +48,16 @@ class ProjetoController(
             }
         )
     }
-    fun getProjetsforColaborador(colaboradorrequesthttp: Colaboradorrequesthttp): Result<List<ProjectResponseHTTP>>{
-        val email = requireNotNull(colaboradorrequesthttp.email)
+    fun getProjetsforColaborador(email:String): Result<List<ProjectResponseHTTP>>{
         return colaboradorrepository.getByEmail(email).fold(
             onSuccess = { colaborador ->
                 respository.getProjectsonColaboradores(colaborador).fold(
                     onSuccess = { projects ->
+                        print("vem aqui")
                         Result.success(projects.map { it.toResponseHttp()})
                     },
                     onFailure = {e ->
+                        print(e)
                         Result.failure(e)
                     }
                 )
